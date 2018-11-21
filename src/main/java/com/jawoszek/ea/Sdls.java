@@ -11,12 +11,6 @@ public class Sdls implements Callable<LabsResult> {
         this.bitsLength = bitsLength;
     }
 
-    public static void main(String[] args) {
-        int n = 30;
-        Boolean[] testingTable = randomBits(n);
-        System.out.println(sdls(testingTable));
-    }
-
     @Override
     public LabsResult call() throws Exception {
         LabsResult bestResult = LabsResult.EMPTY_RESULT;

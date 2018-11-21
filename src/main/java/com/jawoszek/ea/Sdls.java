@@ -1,13 +1,38 @@
 package com.jawoszek.ea;
 
 import java.util.Random;
+import java.util.concurrent.Callable;
 
-public class Sdls {
+public class Sdls implements Callable<LabsResult> {
+
+    private final int bitsLength;
+
+    public Sdls(int bitsLength) {
+        this.bitsLength = bitsLength;
+    }
 
     public static void main(String[] args) {
         int n = 30;
         Boolean[] testingTable = randomBits(n);
         System.out.println(sdls(testingTable));
+    }
+
+    @Override
+    public LabsResult call() throws Exception {
+        LabsResult bestResult = LabsResult.EMPTY_RESULT;
+
+        while (true) {
+            Boolean[] randomBits = randomBits(bitsLength);
+            LabsResult result = sdls(randomBits);
+
+            if (bestResult.getEnergy() > result.getEnergy()) {
+                bestResult = result;
+            }
+
+            if (Thread.currentThread().isInterrupted()) {
+                return bestResult;
+            }
+        }
     }
 
     private static Boolean[] randomBits(int n) {
@@ -16,6 +41,18 @@ public class Sdls {
             s[i] = new Random().nextBoolean();
         }
         return s;
+    }
+
+    private static LabsResult randomResult(int n) {
+        Boolean[] randomBits = randomBits(n);
+        Boolean[][] t = T(randomBits);
+        Integer[] c = C(t);
+
+        int energy = 0;
+        for (int i = 0; i < c.length; i++) {
+            energy += c[i] * c[i];
+        }
+        return new LabsResult(randomBits, energy);
     }
 
     private static Boolean[][] T(Boolean[] bits) {
@@ -83,7 +120,7 @@ public class Sdls {
             fStar += c[i] * c[i];
         }
         boolean improved = true;
-        while (improved) {
+        while (improved && !Thread.currentThread().isInterrupted()) {
             int fPlus = Integer.MAX_VALUE;
             for (int i = 0; i < bits.length; i++) {
                 Boolean[] sPrime = flip(sStar, i);

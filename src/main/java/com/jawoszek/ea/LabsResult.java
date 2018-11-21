@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 public class LabsResult {
 
+    public final static LabsResult EMPTY_RESULT = new LabsResult(new Boolean[0], Integer.MAX_VALUE);
+
     private final Boolean[] bits;
     private final int energy;
 
@@ -25,7 +27,7 @@ public class LabsResult {
     public String toString() {
         return "LabsResult{" +
                 "bits=[" + Arrays.stream(bits).map(bit -> bit ? "1" : "-1").collect(Collectors.joining(",")) +
-                "], energy=" + energy +
+                "], length=" + bits.length + " energy=" + energy +
                 '}';
     }
 }

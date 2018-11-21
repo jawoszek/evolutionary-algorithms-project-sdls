@@ -6,3 +6,11 @@ group 'com.jawoszek'
 version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'commons-cli', name: 'commons-cli', version: '1.3.1'
+}

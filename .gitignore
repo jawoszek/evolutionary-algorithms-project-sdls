@@ -1,0 +1,16 @@
+# IntelliJ
+.idea/
+*.iws
+out/
+
+# Gradle
+build/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# Jars
+*.jar

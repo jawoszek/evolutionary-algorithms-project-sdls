@@ -1,18 +1,19 @@
 package com.jawoszek.ea;
 
 import java.util.Random;
-import java.util.concurrent.Callable;
 
-public class Sdls implements Callable<LabsResult> {
+public class Sdls implements Runnable {
 
     private final int bitsLength;
+    private final LabsReporter reporter;
 
-    public Sdls(int bitsLength) {
+    public Sdls(int bitsLength, LabsReporter reporter) {
         this.bitsLength = bitsLength;
+        this.reporter = reporter;
     }
 
     @Override
-    public LabsResult call() throws Exception {
+    public void run() {
         LabsResult bestResult = LabsResult.EMPTY_RESULT;
 
         while (true) {
@@ -21,10 +22,11 @@ public class Sdls implements Callable<LabsResult> {
 
             if (bestResult.getEnergy() > result.getEnergy()) {
                 bestResult = result;
+                reporter.report(bestResult);
             }
 
             if (Thread.currentThread().isInterrupted()) {
-                return bestResult;
+                return;
             }
         }
     }
